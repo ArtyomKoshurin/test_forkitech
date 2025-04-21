@@ -1,8 +1,10 @@
+from typing import List
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from tron.schema import WalletInfoRequest, WalletInfoResponse, WalletLogList
+from tron.schema import WalletInfoRequest, WalletInfoResponse, WalletLog
 from tron.database import async_session
 from tron.utils import get_wallet_info
 from tron.models import Wallet
@@ -21,7 +23,7 @@ async def wallet_info(
     request: WalletInfoRequest,
     session: AsyncSession = Depends(get_session)
 ):
-    data = await get_wallet_info(request.address)
+    data = get_wallet_info(request.address)
     wallet = Wallet(**data)
     session.add(wallet)
     await session.commit()
@@ -29,7 +31,7 @@ async def wallet_info(
     return data
 
 
-@router.get("/wallet_logs", response_model=WalletLogList)
+@router.get("/wallet_logs", response_model=List[WalletLog])
 async def get_wallet_logs(
     limit: int = 10,
     offset: int = 0,
@@ -38,4 +40,4 @@ async def get_wallet_logs(
     result = await session.execute(select(Wallet).offset(offset).limit(limit))
     logs = result.scalars().all()
 
-    return {"items": logs}
+    return logs
