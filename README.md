@@ -1,4 +1,6 @@
 # Проект test_tron
+Тестовое задание (Тестовое форкитех):
+https://drive.google.com/drive/u/0/folders/1irsS023RO32RO4trOHMhW4rzEykMvbIt
 
 # Установка и развертывание проекта на локальном сервере
 1. Склонируйте репозиторий. 
